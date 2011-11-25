@@ -15,12 +15,14 @@ normalheadings,				% Überschriften etwas kleiner (smallheadings)
 \usepackage[ngerman]{babel}
 \usepackage[isolatin]{inputenc}
 \usepackage{graphicx}
+\usepackage{url}
 
 \begin{document}
 
 \tableofcontents
 
 \chapter{Einführung}
+\label{chap:einfuehrung}
 Modelle als Abbildung der Realität\\
 Schwierigkeiten beim finden von Testfällen für komplexe Anwendungen
 
@@ -31,7 +33,7 @@ Schwierigkeiten beim finden von Testfällen für komplexe Anwendungen
 \label{testbild}%
 \end{figure}
 
-mehr text
+Mehr Text gibts in dem erwähnten Kapitel \ref{chap:einfuehrung} auf Seite \pageref{chap:einfuehrung}.
 
 \chapter{Abstract State Machines}
 Yuri Gurevich, und wie Algorithmen einfach mit Zustände repräsentiert werden können
@@ -91,5 +93,9 @@ Yuri Gurevich, und wie Algorithmen einfach mit Zustände repräsentiert werden kön
 \chapter{Einsatz bei Microsoft}
 
 \chapter{Fazit}
+Dies ist ein ganz kurzer Beispieltext \cite{Boerger}.
+
+\bibliography{SpecExplorer}
+\bibliographystyle{alpha}
 
 \end{document}
