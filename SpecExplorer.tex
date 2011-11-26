@@ -40,7 +40,8 @@ Was als wissenschaftliche Disziplin \cite{Gurevich1993} begann, findet mit Tools
 
 
 \chapter{Abstract State Machines}
-Ein Computerprogramm ist ein Folge von Anweisungen die sequentiell ausgeführt werden. Eine solche Anweisung entspricht einer Zustandsänderung des Programms. Die Menge aller Zustandsänderungen repräsentiert die Funktionsweise des Systems. Yuri Gurevich hat 1999 \cite{Gurevich1999} gezeigt, dass ein solches System in einer von ihm erdachten Struktur namens \textit{Abstract State Machine} abgebildet werden kann. Laut ihm kann jeder Algorithmus, egal wie abstrakt, so modelliert werden. Was 1993 unter der Bezeichnung \textit{Evolving Algebra} von Gurevich vorgestellt \cite{Gurevich1993} wurde, ist ein Zustandsautomat, der Zustände nicht als explizite Dinge betrachtet. Laut Gurevich sind Zustände ambient im System vorhanden und entstehen implizit durch Veränderung von veränderlichen Eigenschaften des Systems. Auch die Zustände in einem Computerprogramm sind abstrakt und werden durch die Anweisungen des Programms verändert. Die gleichen Zustandsänderungen können durch von Gurevich als update-Anweisungen bezeichnete Ausdrücke vorgenommen werden. Gurevich's \textit{Abstract State Machine} kann damit wie in der Abbildung \ref{fig:asmschema} als eine Folge von update-Anweisungen dargestellt werden, die jeweils von einer guard-Annweisung begleitet werden. Die guard-Anweisung vergleicht den Zustand des Systems mit einem Erwartungswert und führt bei einer Übereinstimmung die zugehörige update-Anweisung aus. Die \textit{Abstract State Machine} läuft die Folge immer wieder durch und stellt somit das Programm der Zustandsmaschine dar. Endzustände, Abbruchbedingungen und andere Notationen können ebenfalls definiert werden.
+\label{chap:asm}
+Ein Computerprogramm ist ein Folge von Anweisungen die sequentiell ausgeführt werden. Eine solche Anweisung entspricht einer Zustandsänderung des Programms. Die Menge aller Zustandsänderungen repräsentiert die Funktionsweise des Systems. Yuri Gurevich hat 1999 \cite{Gurevich1999} gezeigt, dass ein solches System in einer von ihm erdachten Struktur namens \textit{Abstract State Machine} abgebildet werden kann. Laut ihm kann jeder Algorithmus, egal wie abstrakt, so modelliert werden. Eine \textit{Abstract State Machine}, 1993 unter der Bezeichnung \textit{Evolving Algebra} vorgestellt \cite{Gurevich1993}, ist ein Zustandsautomat, der Zustände nicht als explizite Dinge betrachtet. Laut Gurevich sind Zustände ambient im System vorhanden und entstehen implizit durch Veränderung von veränderlichen Eigenschaften des Systems. Auch die Zustände in einem Computerprogramm sind abstrakt und werden durch die Anweisungen des Programms verändert. Die gleichen Zustandsänderungen können durch von Gurevich als update-Anweisungen bezeichnete Ausdrücke vorgenommen werden. Gurevich's \textit{Abstract State Machine} kann damit wie in der Abbildung \ref{fig:asmschema} als eine Folge von update-Anweisungen dargestellt werden, die jeweils von einer guard-Annweisung begleitet werden. Die guard-Anweisung vergleicht den Zustand des Systems mit einem Erwartungswert und führt bei einer Übereinstimmung die zugehörige update-Anweisung aus. Die \textit{Abstract State Machine} läuft die Folge immer wieder durch und stellt somit das Programm der Zustandsmaschine dar. Endzustände, Abbruchbedingungen und andere Notationen können ebenfalls definiert werden.
 
 \begin{figure}[htbp]
 \centering
@@ -54,23 +55,37 @@ Das Konzept der \textit{Abstract State Machine} wird auch durch Egon Börger in F
 
 
 \chapter{Entwicklung von Spec Explorer}
-todo
+Nachdem der Begriff des Testen in Kapitel \ref{chap:einfuehrung} eingeführt und das Konzept von abstrakten Zuständen in Kapitel \ref{chap:asm} erläutert wurde, beschäftigt sich dieses Kapitel mit dem Werdegang der Visual Studio Erweiterung Spec Explorer. Wolfgang Grieskamp beschreibt in seinem Blogeintrag \cite{Grieskamp2009} die Entwicklung von der theoretischen Idee der \textit{Abstract State Machine} bis zu einem allgemeinen Programm das von Entwicklern genutzt werden kann.
 
 \section{AsmL}
+Nachdem Gurevich 1999 die theoretische Grundlage gelegt \cite{Gurevich1999} hat, wurde die erste Implementierung einer Beschreibungssprache für \textit{Abstract State Machines} von einem Team in Microsoft vorgenommen. Diese Sprache wurde unter der Bezeichnung \textit{AsmL} (Abstract State Machine Language) bekannt. Laut Grieskamp \cite{Grieskamp2009} waren neben ihm selbst auch Yuri Gurevich, Margus Veanes, Wolfram Schulte, Lev Nachmanson, Colin Campbell und Nikolai Tillmann an der Entwicklung der Sprache beteiligt. Das Projekt wurde nie vollständig released und war eher ein Forschungsprojekt. \textit{AsmL} wurde nicht zum Testen, wie in Kapitel \ref{chap:einfuehrung} vorgestellt, entwickelt, sondern diente dem formalen Beweisen der Korrektheit von Softwaresystemen. Auf der Codeplex-Seite von \textit{AsmL} \cite{Microsoft2003} kann der Quellcode eines Binärcompilers heruntergeladen werden.
 
 \section{AsmL-T}
+Ein erster Ansatz \textit{AsmL} zum Testen von Softwaresystemen zu verwenden, wurde mit einer Erweiterung der Sprache unter dem Namen \textit{AsmL-T} von Wolfgang Grieskamp und Nikolai Tillmann entwickelt \cite{Grieskamp2009}. Eine wesentliche Ergänzung war die Funktion sämtliche Zustände des mit einer \textit{Abstract State Machine} beschriebenen Softwaresystems explorativ zu ermitteln. Grieskamp nennt dieses Feature \textit{state space exploration}. Damit war das erste modellbasierte Test-Werkzeug entwickelt.
+\\
+\textit{AsmL-T} wurde laut Grieskamp \cite{Grieskamp2009} verwendet, um die \textit{WCF} (Windows Communication Foundation) Implementierung zu testen. Angeblich wurde das Testen mithilfe von \textit{AsmL-T} beliebter und bekannter als die \textit{AsmL}-Sprache selber.
 
 \section{Spec$\#$}
+Aufgrund des zunehmendem Desinteresse an \textit{AsmL} wurde laut Grieskamp \cite{Grieskamp2009} eine neue Implementierung benötigt. Aus diesem Grund entstand \textit{Spec$\#$} als leichtgewichtige \textit{AsmL}-Implementierung. \textit{Spec$\#$} nutzt die Syntax von C$\#$ und nutzte als erste Sprache sogenannte \textit{Code Contracts}. Obwohl C$\#$-Syntax verwendet wird, wird für \textit{Spec$\#$} ein spezieller Compiler benötigt. Wahrscheinlich hat sich auch \textit{Spec$\#$} aus diesum Grund bis heute noch nicht durchgesetzt. Ob \textit{Spec$\#$} die \textit{AsmL}-Implementierung in \textit{AsmL-T} ersetzte, geht aus Grieskamps Blogpost \cite{Grieskamp2009} leider nicht hervor. 2004 wurde \textit{AsmL-T} dann Microsoft-intern unter dem Namen Spec Explorer 2004 veröffentlicht.
 
 \section{PEX}	
+Laut Grieskamp \cite{Grieskamp2009} wurde das Team, das sich bei Microsoft mit der Entwicklung von Spec Explorer 2004 beschäftigt, 2005 getrennt. Während sich ein kleiner Teil des ursprünglichen Teams weiterhin mit der Entwicklung von modellbasierten Test-Werkzeugen beschäftigt, wurde ein neues Team gegründet. Dieses neue Team entwickelte ein Programm, das zu testenden Programmcode analysiert und Eingabewerte ermittelt, die zu einer möglichst hohen Testabdeckung des zu testenden Programmcodes führen. Dieses Programm wurde inzwischen unter dem Namen \textit{PEX} veröffentlicht.
 
 
 
 \chapter{Modellbasiertes Testen}
+Erklärung was ist modellbasiertes Testen \cite{Kicillof2009}.
 
-\section{Erklärung}
+\section{Anwendung}
+Model-based Software Testing and Analysis with C$\#$ (Cambridge University Press, 2008)
+\\Jonathan Jacky, Margus Veanes, Colin Campbell, Wolfram Schulte
+\\http://staff.washington.edu/jon/modeling-book/
+\\Open-source implementation called NModel http://nmodel.codeplex.com/
 
 \section{Schwierigkeiten}
+Multi-paradigmatic Model-Based Testing (Springer-Verlag, 2006)
+\\Wolfgang Grieskamp
+\\http://www.springerlink.com/content/087hx3160357088u
 
 \subsection{State Explosion}
 
@@ -87,6 +102,12 @@ todo
 \chapter{Spec Explorer 2010}
 
 \section{Die Lösung}
+SpecExplorer 2010
+\\Erster Prototype 2006
+\\Model exploration auf der CIL (C$\#$ as input notation)
+\\Scripting language CORD
+\\Visual Studio integration
+\\Automatische Test suite Erzeugung für Microsoft.VisualStudio.TestTools.UnitTesting
 
 \section{Umgebung}
 
@@ -101,6 +122,8 @@ todo
 \section{Szenarien}
 
 \section{Testfälle}
+
+
 
 \chapter{Visual Studio Integration}
 
@@ -117,10 +140,6 @@ todo
 
 
 \chapter{Fazit}
-Dies ist ein ganz kurzer Beispieltext \cite{Boerger}.
-\\\\
-Mehr Text gibts in dem erwähnten Kapitel \ref{chap:einfuehrung} auf Seite \pageref{chap:einfuehrung}.
-
 
 
 
