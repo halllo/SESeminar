@@ -77,15 +77,10 @@ Laut Grieskamp \cite{Grieskamp2009} wurde das Team, das sich bei Microsoft mit d
 Spec Explorer ist ein modellbasiertes Test-Werkzeug. Dieses Kapitel beschäftigt sich damit, was modellbasiertes Testen überhaupt heißt. Nico Kicillof beschreibt MBT (Model Based Testing) in seinem Blogppost \cite{Kicillof2009} als leichtgewichtige und formale Methode um ein Softwaresystem zu validieren. MBT ist formal, weil es auf einer formalen, also Maschinen leserlichen Spezifikation, also dem Modell der Software arbeitet, die getestet werden soll. Kicillof nennt eine solche Software \textit{System Under Test}. Weiterhin ist MBT leichtgewichtig, da es im Gegensatz zu anderen formalen Methoden keinen mathematischen Beweis anstrebt um zu zeigen das die Implementierung der Spezifikation unter allen möglichen Umständen entspricht. MBT erzeugt aus einem Modell systematisch eine Menge von Testfällen, die auch \textit{test suite} genannt wird. Diese Testfälle, wenn sie auf die Implementierung des Systems angewendet werden, bieten ausreichende Überzeugung, dass das \textit{System Under Test} sich so verhält, wie sein Modell es definiert hat. Laut Kicillof \cite{Kicillof2009} ist der Unterschied zwischen leichtgewichtigen und schwergewichtigen formalen Methoden der Unterschied zwischen ausreichender Überzeugung und vollständiger Sicherheit. Allerdings sei der Preis für absolute Sicherheit sehr hoch, da schwergewichtige Methoden benötigt werden, die nur sehr schwierig angewendet werden können. Der leichtgewichtige MBT-Ansatz dagegen, würde laut Kicillof, viel besser skalieren und wurde bereits erfolgreich in großen Projekten, auch innerhalb Microsoft, angewendet.
 
 \section{Anwendung}
-Model-based Software Testing and Analysis with C$\#$ (Cambridge University Press, 2008)
-\\Jonathan Jacky, Margus Veanes, Colin Campbell, Wolfram Schulte
-\\http://staff.washington.edu/jon/modeling-book/
-\\Open-source implementation called NModel http://nmodel.codeplex.com/
+Nachdem die theoretischen Grundlagen des modellbasierten Testen erwähnt wurden, beschäftigt sich dieser Abschnitt mit der Anwendung der Methode. Neben vielen Texten im Internet gibt es ein Schriftstück, das besondere Authorität genießt. Margus Veanes, Colin Campbell und Wolfram Schulte haben das Spec Explorer Team bei Microsoft verlassen und zusammen mit Jonathan Jacky ein Buch über modellbasiertes Testen mit C$\#$ veröffentlicht \cite{JonathanJacky2008}. Zu diesem Buch haben besagt vier eine open-source Implementierung eines modellbasierten Test-Werkzeugs namens \textit{NModel} released \cite{Microsoft2008}, welches auf der codeplex-Seite kostenlos heruntergeladen kann. Inwiefern \textit{NModel} die gleichen Funktionen wie Spec Explorer besitzt, konnte im Rahmen dieser Seminararbeit leider nicht näher untersucht werden.
 
 \section{Schwierigkeiten}
-Multi-paradigmatic Model-Based Testing (Springer-Verlag, 2006)
-\\Wolfgang Grieskamp
-\\http://www.springerlink.com/content/087hx3160357088u
+Obwohl die Methode des modellbasierten Testen laut Nico Kicillof \cite{Kicillof2009} wesentlich einfacher und besser anwendbar als andere Verifikationsverfahren sind, bestehen auch hier einige Schwierigkeiten. Wolfgang Grieskamp hat sich in seinem Buch \cite{Grieskamp2006} mit diesen Problemen auseinander gesetzt. In den folgenden Unterabschnitten werden die fünf Probleme näher beschrieben, die die effektive Nutzung der Methode mithilfe eines Werkzeugs besonders schwierig oder umständlich machen.
 
 \subsection{State Explosion}
 

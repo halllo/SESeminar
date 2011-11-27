@@ -15,7 +15,7 @@ ShowCmd=3
 MinPos.x=-1
 MinPos.y=-1
 MaxPos.x=-8
-MaxPos.y=-31
+MaxPos.y=-30
 NormalPos.left=26
 NormalPos.top=26
 NormalPos.right=762
@@ -24,15 +24,15 @@ Class=CLatexEdit
 Document=SpecExplorer.tex
 
 [Frame0_Row0]
-cyCur=392
+cyCur=953
 cyMin=10
 
 [Frame0_Col0]
-cxCur=802
+cxCur=1693
 cxMin=10
 
 [Frame0_View0,0]
-Cursor.row=79
-Cursor.column=13
-TopSubLine=173
+Cursor.row=91
+Cursor.column=0
+TopSubLine=108
 
