@@ -32,7 +32,7 @@ cxCur=1693
 cxMin=10
 
 [Frame0_View0,0]
-Cursor.row=95
-Cursor.column=112
-TopSubLine=130
+Cursor.row=215
+Cursor.column=0
+TopSubLine=252
 
