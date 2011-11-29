@@ -3,7 +3,7 @@ Type=TeXnicCenterProjectSessionInformation
 Version=2
 
 [SessionInfo]
-ActiveTab=3
+ActiveTab=0
 FrameCount=1
 ActiveFrame=0
 
@@ -24,7 +24,7 @@ Class=CLatexEdit
 Document=SpecExplorer.tex
 
 [Frame0_Row0]
-cyCur=131
+cyCur=392
 cyMin=10
 
 [Frame0_Col0]
@@ -32,7 +32,7 @@ cxCur=802
 cxMin=10
 
 [Frame0_View0,0]
-Cursor.row=54
-Cursor.column=0
-TopSubLine=54
+Cursor.row=168
+Cursor.column=10
+TopSubLine=354
 
