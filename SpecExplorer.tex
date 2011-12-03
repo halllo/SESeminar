@@ -50,8 +50,13 @@ Manuel Naujoks
 
 
 
+\begingroup
+\addtocontents{toc}{\protect\thispagestyle{empty}}
+\pagestyle{empty}
 \tableofcontents
-\setcounter{page}{0}
+\newpage
+\setcounter{page}{1}
+\endgroup
 
 
 
@@ -150,20 +155,26 @@ Das in Unterabschnitt \ref{subsec:stateexplosion} beschriebene Problem, dass der
 Über \textit{machines} kann die Benutzbarkeit des Modells definiert werden. In Abschnitt \ref{sec:explorationmanager} wird der Exploration Manager vorgestellt. In diesem Manager, der die Interaktion des Benutzers mit dem Tool ermöglicht, werden alle \textit{machines} aufgelistet. Eine \textit{machine} könnte zum Beispiel die Exploration des Modells repräsentieren. Eine weitere \textit{machine} könnte den Zustandsraum mit Szenarien, die ebenfalls als \textit{machine} definiert werden können, verbinden. Auch die Testfallerzeugung wir mit einer \textit{machine} beschrieben.
 
 \subsection{Spezifikation}
-Spec Explorer löst die Schwierigkeit des in Unterabschnitt \ref{subsec:spezifikation} als Modellspezifikation beschrieben Problem auf eine sehr einfacher Art. Die formale Spezifikation des Modells, das  die Implementierung repräsentieren soll, kann mithilfe der .NET Sprache C$\#$ vorgenommen. Dadurch brauch der Entwickler keine neue Synatax lernen und kann sich auf die Übersetzung von Anforderungen in ein C$\#$-Modell konzentrieren. Unterstützung für andere .NET Sprachen als Modellsprache konnte im Rahmen der Evaluierung nicht festgestellt werden. 
+Spec Explorer löst die Schwierigkeit des in Unterabschnitt \ref{subsec:spezifikation} als Modellspezifikation beschrieben Problem auf eine sehr einfache Art. Die formale Spezifikation des Modells, das  die Implementierung repräsentieren soll, kann mithilfe der .NET Sprache C$\#$ vorgenommen. Dadurch brauch der Entwickler keine neue Syntax lernen und kann sich auf die Übersetzung von Anforderungen in ein C$\#$-Modell konzentrieren. Unterstützung für andere .NET Sprachen als Modellsprache konnte im Rahmen der Evaluierung nicht festgestellt werden. 
 
 \subsection{Zustände und Szenarien}
-Unterabschnitt \ref{subsec:zustaendeszenarien} \\
+\label{subsec:loesungszenarien}
+In Unterabschnitt \ref{subsec:zustaendeszenarien} wurde das Problem beschrieben, dass Funktionen, wie Kapitel \ref{chap:einfuehrung} vorgestellt, als Szenarien getestet werden. Erst durch ein erfolgreich getestetes Szenario kann davon ausgegangen werden, dass ein Feature der Anwendung funktioniert. Ein Szenario ist, wie bereits erwähnt, eine Abfolge von Benutzer-Aktionen: Einloggen, Bestellen, Ausloggen wäre ein Beispiel. Spec Explorer erlaubt es, Szenarien als \textit{machines} zu definieren. Dazu wird eine \textit{CORD}-Syntax verwendet, die sehr stark an reguläre Ausdrücke erinnert, um Aktionen, die im Modell als solche gekennzeichnet werden, in definierter Reihenfolge aufzurufen. Welche Möglichkeiten diese Ausdrucksweise bietet, konnte in dieser Seminararbeit leider nicht weiter analysiert werden.
+\\
+Wird die \textit{machine} eines Szenarios über den Exploration Manager aufgerufen, wird das Modell anhand des Szenarios ebenfalls exploriert und als Zustandsdiagramm dargestellt. Dabei nimmt das Modell pro Aktion einen Zustandswechsel vor, sodass mehrere Zustände erreicht werden. In einer weiteren \textit{machine} können die Zustände, die durch ein Szenario erreicht werden, aus der Zustandsraum-Exploration heraus geschnitten werden. Spec Explorer spricht hier von \textit{slicing}. Das Ergebnis dieser parallelen Ausführung der Explorations-Maschine und der Szenario-Maschine kann ebenfalls als Zustandsdiagramm dargestellt werden. Hier werden dann alle Zustände angezeigt, die durch Aufrufe der Aktionen des Modells mit konkreten Werten im Rahmen eines Szenarios erreicht werden. Es entsteht also ein Zustandsautomat, der ein Szenario, also die Features einer User Story, repräsentiert. Aus dieser kombinierten \textit{machine} werden später auch die Testfälle für dieses Feature erzeugt.
 
 \subsection{IDE Unterstützung}
-Unterabschnitt \ref{subsec:ideunterstuezung} \\
-\\Visual Studio integration
+In Unterabschnitt \ref{subsec:ideunterstuezung} wurde mangelnde Unterstützung für Entwicklungsumgebungen als Problem klassifiziert. Spec Explorer ist eine Visual Studio 2010 Erweiterung und damit in die IDE von Microsoft integriert. In Kapitel \ref{chap:vsintegration} wird konkret gezeigt, wie diese Integration aussieht. Unterstützung für andere Entwicklungsumgebungen ist nicht vorhanden. Da Erweiterungen für Visual Studio 2010 erst ab der Professional Edition installiert werden können, ist Spec Explorer leider auch nicht für die Visual Studio Express Editionen verfügbar.
 
 \subsection{Testfallerzeugung}
-Unterabschnitt \ref{subsec:testfallerzeugung} \\
-\\Automatische Test suite Erzeugung für Microsoft.VisualStudio.TestTools.UnitTesting
+Das Funktionen der Anwendung Szenario-orientiert getestet werden, wurde bereits in Kapitel \ref{chap:einfuehrung} erwähnt. Wie Szenarien mit Spec Explorer im Rahmen der Zustandsraum-Exploration verwendet werden können, wurde in Unterabschnitt \ref{subsec:loesungszenarien} beschrieben. Spec Explorer nutzt das standardmäßig mit Visual Studio 2010 Professional ausgelieferte Test Framework (\textit{Microsoft.VisualStudio.TestTools.UnitTesting}) sowie dessen Integration \textit{MS Test}. Damit laufen die von Spec Explorer erzeugten Testfälle im Test Runner von Visual Studio. Unterstützung für andere Test Frameworks konnte leider nicht festgestellt werden.
+\\
+Testfälle werden durch eine \textit{machine} erzeugt, die den Zustandsautomaten eines Szenarios in einzelne lineare Abläufe von Aktionen aufteilt. Aus einem Szenario werden so mehrere isolierte Abläufe, die in dem Automaten parallel existieren. Die erzeugten Tests sind sehr überladen und erhalten neben den Aufrufen der Aktionen der Implementierung, die durch das Modell festgelegt wurden, eine Menge an Kommentaren, die den Testfall unleserlich machen. Da die erzeugten Tests jederzeit neu aus der entsprechenden \textit{machine} erzeugt werden können, ist eine manuelle Änderung nicht vorgesehen.
+\\ 
+Bei der Testfallerzeugung kommt zum ersten mal die Implementierung zum Tragen. Während die Zustände und Szenarien über dem Modell definiert werden, nutzen die erzeugten Tests die Implementierung. Die Tests rufen die über Aktionen auf dem Modell definierten Methoden der Implementierung auf, und vergleichen anschließend den Zustand der Implementierung mit dem Zustand den das Modell in gleichem Kontext hatte. Der Test schließt erfolgreich ab, wenn die Implementierung der gleichen Zustand besitzt wie das Modell. Der Test schlägt fehl, wenn die Zustände nicht identisch sind. Also wird die in Kapitel \ref{chap:mbt} beschriebene Verifikation der Implementierung anhand der durch das Modell spezifizierten Zustände über die erzeugten Testfälle vorgenommen. Die Verifikation könnte dank der erzeugten Testfälle auch ausgelagert werden und beispielsweise automatisch durchgeführt werden, sobald ein neuer Build der Implementierung entsteht. Die Testfälle müssen erst neu erzeugt werden, wenn sich die Anforderungen und damit das Modell der Software ändern.
 
 \section{Umgebung}
+Abbildung \ref{fig:seworkflow} illustriert den Ablauf des Testens mit Spec Explorer. Dabei werden unter anderem die drei Bestandteile der Umgebung dargestellt (die Implementierung, das Modell und die erzeugten Testfälle) und in wie diese zusammenhängen.
 
 \begin{figure}[htbp]
 \centering
@@ -172,7 +183,12 @@ Unterabschnitt \ref{subsec:testfallerzeugung} \\
 \label{fig:seworkflow}
 \end{figure}
 
+In der semantischen Darstellung wird davon ausgegangen, dass bereits eine Implementierung besteht, die anhand eines ebenfalls bestehenden Modells verifiziert wird. Selbstverständlich könnte auch nur ein Modell existieren und die Implementierung würde erst nach der Testfallerzeugung im Rahmen eines \textit{Test Driven Development}-Ansatzes entstehen. Ebenfalls kann eine bestehende Implementierung auch nachträglich getestet werden, indem das Modell nachträglich entsteht. Eine gute Spezifikation entsteht jedenfalls dann, wenn Modell und Implementierung möglichst unabhängig voneinander entstehen.
+\\
+In diesem Abschnitt werden die Zusammenhänge von Implementierung, Modell und Konfiguration des Modells beschrieben. 
+
 \subsection{Implementierung}
+Der erste Teil einer Spec Explorer Umgebung besteht aus der Implementierung.
 
 \begin{figure}[htbp]
 \centering
@@ -182,6 +198,7 @@ Unterabschnitt \ref{subsec:testfallerzeugung} \\
 \end{figure}
 
 \subsection{Modell}
+Der zweite Teil einer Spec Explorer Umgebung besteht aus dem Modell.
 
 \begin{figure}[htbp]
 \centering
@@ -191,6 +208,7 @@ Unterabschnitt \ref{subsec:testfallerzeugung} \\
 \end{figure}
 
 \subsection{Konfiguration}
+Der zweite Teil einer Spec Explorer Umgebung enthält neben dem Modell auch eine Konfiguration. Diese Konfiguration besteht aus \textit{configs}.
 
 \begin{figure}[htbp]
 \centering
@@ -198,6 +216,8 @@ Unterabschnitt \ref{subsec:testfallerzeugung} \\
 \caption{Die Konfiguration der Modellexploration}
 \label{fig:seconfig1}
 \end{figure}
+
+Die Konfiguration besteht ebenfalls aus \textit{machines}.
 
 \begin{figure}[htbp]
 \centering
@@ -262,6 +282,7 @@ Unterabschnitt \ref{subsec:testfallerzeugung} \\
 \end{figure}
 
 \chapter{Visual Studio Integration}
+\label{chap:vsintegration}
 
 \section{Exploration Manager}
 \label{sec:explorationmanager}

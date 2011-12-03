@@ -24,7 +24,7 @@ Class=CLatexEdit
 Document=SpecExplorer.tex
 
 [Frame0_Row0]
-cyCur=392
+cyCur=421
 cyMin=10
 
 [Frame0_Col0]
@@ -32,7 +32,7 @@ cxCur=802
 cxMin=10
 
 [Frame0_View0,0]
-Cursor.row=168
-Cursor.column=10
-TopSubLine=354
+Cursor.row=228
+Cursor.column=21
+TopSubLine=490
 
