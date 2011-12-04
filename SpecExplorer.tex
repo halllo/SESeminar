@@ -16,6 +16,7 @@ normalheadings,				% Überschriften etwas kleiner (smallheadings)
 \usepackage[isolatin]{inputenc}
 \usepackage{graphicx}
 \usepackage{url}
+\usepackage{tipa}
 \usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm,includeheadfoot]{geometry}
 
 \begin{document}
@@ -103,6 +104,7 @@ Ein erster Ansatz \textit{AsmL} zum Testen von Softwaresystemen zu verwenden, wu
 \textit{AsmL-T} wurde laut Grieskamp \cite{Grieskamp2009} verwendet, um die \textit{WCF} (Windows Communication Foundation) Implementierung zu testen. Angeblich wurde das Testen mithilfe von \textit{AsmL-T} beliebter und bekannter als die \textit{AsmL}-Sprache selber.
 
 \section{Spec$\#$}
+\label{sec:specsharp}
 Aufgrund des zunehmendem Desinteresse an \textit{AsmL} wurde laut Grieskamp \cite{Grieskamp2009} eine neue Implementierung benötigt. Aus diesem Grund entstand \textit{Spec$\#$} als leichtgewichtige \textit{AsmL}-Implementierung. \textit{Spec$\#$} nutzt die Syntax von C$\#$ und nutzte als erste Sprache sogenannte \textit{Code Contracts}. Obwohl C$\#$-Syntax verwendet wird, wird für \textit{Spec$\#$} ein spezieller Compiler benötigt. Wahrscheinlich hat sich auch \textit{Spec$\#$} aus diesum Grund bis heute noch nicht durchgesetzt. Ob \textit{Spec$\#$} die \textit{AsmL}-Implementierung in \textit{AsmL-T} ersetzte, geht aus Grieskamps Blogpost \cite{Grieskamp2009} leider nicht hervor. 2004 wurde \textit{AsmL-T} dann Microsoft-intern unter dem Namen Spec Explorer 2004 veröffentlicht.
 
 \section{PEX}	
@@ -148,6 +150,7 @@ Die aktuelle Version heißt Spec Explorer 2010. Ein erster Prototyp des Werkzeugs
 In diesem Abschnitt wird beschrieben, wie Spec Explorer die in Abschnitt \ref{sec:schwierigkeiten} beschriebenen Schwierigkeiten bei der Verwendung eines MBT-Werkzeugs adressiert.
 
 \subsection{State Explosion}
+\label{subsec:loesungstateexplosion}
 Das in Unterabschnitt \ref{subsec:stateexplosion} beschriebene Problem, dass der Zustandsraum sehr groß wird löst Spec Explorer dadruch Abbruchgrenzen. So ist es möglich den Zustandsraum nur für eine definierte Anzahl an Interation zu explorieren. Weiterhin lassen sich auch Abbruchbedingungen als sogenannte \textit{Bounds} definieren, die Zustände ab einer definierten Entfernung vom Startzustand ignorieren. Was Konfigurationsmöglichkeiten betrifft nutzt Spec Explorer sogenannte \textit{configs} und \textit{machines}, welche in einer Konfigurationsdatei definiert werden. Diese Konfiguration wird über eine Scriptsprache zur Koordination realisiert, die \textit{CORD} genannt wird.
 \\
 Über \textit{configs} können Einstellungen wie beispielsweise Abbruchbedingungen für die Exploration definiert werden. Weiterhin können auch die Methoden des Modells, die für die Exploration von Bedeutung sind, mit einem Wertebereich für Parameter versehen werden um spezielle Parameterkombinationen zu erzeugen. Diese Methoden werden von Spec Explorer genutzt um das Modell zu explorieren und somit alle Zustände des Modells zu erreichen. Dabei werden die Parameterkombinationen berücksichtigt.
@@ -188,7 +191,7 @@ In der semantischen Darstellung wird davon ausgegangen, dass bereits eine Implem
 In diesem Abschnitt werden die Zusammenhänge von Implementierung, Modell und Konfiguration des Modells beschrieben. 
 
 \subsection{Implementierung}
-Der erste Teil einer Spec Explorer Umgebung besteht aus der Implementierung.
+Der erste Teil einer Spec Explorer Umgebung besteht aus der Implementierung. In Abbildung \ref{fig:seimplementation1} ist rechts die Umgebung zu sehen, die durch \textit{File/New Project/Spec Explorer Project} erstellt wird. Die Visual Studio Solution enthält drei Projekte. Das erste Projekt ist das Modell-Projekt und enthält neben der Klasse \emph{AccumulatorModelProgram} die Konfiguration \emph{Config.cord}. Das zweite Projekt ist das Implementierung-Projekt und enthält nur die Klasse \emph{Accumulator}. Das letzte Projekt ist ein \textit{MS Test}-Projekt, dass die erzeugten Testfälle enthält. Da das Test-Projekt aus dem Modell-Projekt entsteht, wird dieses Projekt an dieser Stelle nicht weiter behandelt.
 
 \begin{figure}[htbp]
 \centering
@@ -197,8 +200,12 @@ Der erste Teil einer Spec Explorer Umgebung besteht aus der Implementierung.
 \label{fig:seimplementation1}
 \end{figure}
 
+Die erwähnte Projektstruktur ist typisch für ein Spec Explorer Projekt, auch wenn die im Beispiel erwähnten Klassen dem Sample entsprechen, das Spec Explorer automatisch erzeugt wenn ein Projekt erstellt wird. In einer produktiven Umgebung würden die erstellten Klassen entfernt und durch eigene ersetzt werden. Natürlich kann ein Spec Explorer Projekt auch nachträglich aus einem bereits existierenden Projekt erzeugt werden, indem ein Modell- und Test-Projekt angelegt werden, aber dieser Fall wird im Folgenden nicht weiter betrachtet.
+\\
+Die in Abbildung \ref{fig:seimplementation1} dargestellte Klasse \emph{Accumulator} ist Teil Implementierung. Offensichtlich ist die dargestellte Implementierung fehlerhaft. Auch wenn dieses Beispiel sehr trivial erscheint, werden die Eigenschaften von Spec Explorer sowie der entsprechende Arbeitsablauf an diesem Beispiel sehr gut deutlich. Die Absicht der Implementierung in diesem Fall soll Ganzzahlen aufaddieren und zurückgeben können. Beim Zurückgeben sollen die aufsummierten Zahlen wieder auf 0 gesetzt werden. Dieses Verhalten soll durch ein Modell verifiziert werden können.
+
 \subsection{Modell}
-Der zweite Teil einer Spec Explorer Umgebung besteht aus dem Modell.
+Das zweite Projekt in der Spec Explorer Solution enthält das Modell. Spec Explorer unterstzt zwei Modell-Typen. Zum einen das statische Modell und zum anderen das nicht-statische Modell. Das statische Modell ist eine statische Klasse, dessen Aktionen ebenfalls nur statisch sind. Dadurch brauch sich Spec Explorer bei der Zustandsraum Exploration nicht um Instanzen kümmern. Das nicht-statische Modell verwendet Methoden von Objekten als Aktionen während der Exploration. Dadurch können unterschiedliche Zustände entstehen, je nachdem auf welchem Modell-Objekt eine Aktion ausgeführt wird. In dieser Seminararbeit wird ausschließlich der statische Ansatz behandelt. Das bedeutet nicht, dass das statische Modell keine Objekte verwenden kann, sondern lediglich die Aktionen müssen statisch bleiben. Dieser Ansatz hat also nur ein einziges Objekt-Kontext und das ist die Klasse selber.
 
 \begin{figure}[htbp]
 \centering
@@ -207,8 +214,12 @@ Der zweite Teil einer Spec Explorer Umgebung besteht aus dem Modell.
 \label{fig:semodel}
 \end{figure}
 
+In Abbildung \ref{fig:semodel} ist der Quellcode des Modells des Aufsummierers dargestellt. Methoden, die als Aktionen unterschiedliche Zustände während der Exploration erzeugen, werden als Regel definiert, indem ein \emph{Rule}-Attribut zur Dekoration der Methode verwendet wird. In diesem Attribut wird auch die Methode der Implementierung spezifiziert, die der Zustandsänderung entspricht. Dies ist notwendig, da die erzeugten Testfälle genau diese Methode nutzen sollen, um die erwartete Zustandsänderung der Implementierung herbeizuführen und anschließend zu verifizieren. Die Methodensignaturen müssen kompatibel sein.
+\\
+Die Regeln des Modells entsprechen einer sehr einfachen Realisierung der Implementierung. Das Modell einer Datenbank könnte beispielsweise eine Hashtable als Datenstruktur verwenden. Das Modell in diesem Summen-Beispiel ist mit der Implementierung fast identisch, was an der Trivialität des Beispiels liegt. Weiterhin können \textit{Code Contracts}, die bereits aus Abschnitt \ref{sec:specsharp} über \textit{Spec$\#$} bekannt sind. Im Beispiel enthält jede Regel des Modells eine Pre-Condition und zwar wird dadurch sichergestellt, dass das Modell nur positive Zahlen, die größer als Null sind, aufaddiert. Dadurch wird die Zustandsraum-Exploration eingeschränkt um dem Problem der Zustandsraum-Explosion aus Unterabschnitt \ref{subsec:stateexplosion} entgegengewirkt, da nur Aufrufe dieser Aktion nur neue Zustände erzeugen, wenn die Vorbedingungen gelten.
+
 \subsection{Konfiguration}
-Der zweite Teil einer Spec Explorer Umgebung enthält neben dem Modell auch eine Konfiguration. Diese Konfiguration besteht aus \textit{configs}.
+Das zweite Projekt einer Spec Explorer Solution enthält neben dem Modell auch eine Konfiguration. Diese Konfiguration besteht aus den in Unterabschnitt \ref{subsec:loesungstateexplosion} bereits vorgestellten \textit{configs} und \textit{machines}. Abbildung \ref{fig:seconfig1} zeigt die beiden \textit{configs} der Konfiguration des Summen-Beispiels. Die \emph{Main}-\textit{config} nimmt über \textit{switches} allgemeingültige Einstellungen der Explorationen der \textit{machines} vor. Unter anderem wird in dem Beispiel der Pfad zu dem Test-Projekt festgelegt, in dem die Testfälle erzeugt werden sollen. Eine maximale Aktions-Tiefe für Aufrufe der Modellregeln wird ebenfalls festgelegt. Die wichtigste Einstellung ist allerdings die Definition der Regeln der Modells als Aktionen (\textit{actions}).
 
 \begin{figure}[htbp]
 \centering
@@ -217,7 +228,10 @@ Der zweite Teil einer Spec Explorer Umgebung enthält neben dem Modell auch eine 
 \label{fig:seconfig1}
 \end{figure}
 
-Die Konfiguration besteht ebenfalls aus \textit{machines}.
+Die \emph{ParameterCombination}-\textit{config} stellt eine Parameterkombination dar, wie sie bereits in Unterabschnitt \ref{subsec:loesungstateexplosion} beschrieben wurde. Diese Kombination ist eine Erweiterung für die \emph{Main}-\textit{config}, was durch die Notation der Vererbung ausgedrückt wird. Die Aktion \emph{Accumulator.Add(int x)} wird im Beispiel eingeschränkt, sodass der Wert für \emph{x} aus dem Intervall \emph{[0..2]} gewählt wird. Dies ist eine weitere Möglichkeit die Zustandsraum-Explosion aus Unterabschnitt \ref{subsec:stateexplosion} in den Griff zu bekommen.
+\\
+Die Konfiguration besteht ebenfalls aus \textit{machines}. Abbildung \ref{fig:seconfig2} zeigt die Definition von vier Maschinen. Die \emph{AccumulatorModelProgram}-\textit{machine} nutzt die \emph{Main}-\textit{config} und erlaubt die Exploration. Der komplette Zustandsraum wird unter Verwendung der in \emph{ParameterCombination}-\textit{config} definierten Parameterkombination exploriert.
+Die \emph{DoubleAddScenario}-\textit{machine} definiert ein Szenario, wie es in Unterabschnitt \ref{subsec:loesungszenarien} vorgestellt wurde. Diese Maschine erlaubt ebenfalls die Exploration, allerdings nicht die des Zustandsraums des Modells. Lediglich die Zustände des Szenarios, also ohne Werte des Modells mit einzubeziehen, werden exploriert. Die Syntax der Definition der Regel-Aufrufe ((\emph{Add}, \emph{Add}, \emph{ReadAndReset}) beliebig oft und mit beliebigen Werten) ähnelt der Syntax von regulären Ausdrücken.
 
 \begin{figure}[htbp]
 \centering
@@ -225,6 +239,9 @@ Die Konfiguration besteht ebenfalls aus \textit{machines}.
 \caption{Die Konfiguration der Modell-Maschinen}
 \label{fig:seconfig2}
 \end{figure}
+
+Die \emph{SlicedAccumulatorModelProgram}-\textit{machine} lässt sich ebenfalls explorieren und verbindet den Zustandsraum mit dem Szenario. Die Notation der Verbindung über den \textdoublevertline
+ -Operator lässt beide Maschinen parallel ausführen. Das Ergebnis ist also die Exploration des Zustandsraums des Szenarios, unter Berücksichtigung der Zustände des Modells. Es werden also alle möglichen Zustände gefunden, die das Modell haben kann, im Rahmen des Szenarios. Die \emph{AccumulatorTestSuite}-\textit{machine} ist ebenfalls explorierbar und kann Testfälle erzeugen. Dafür nutzt diese Maschine das Explorationsergebnis der \emph{SlicedAccumulatorModelProgram}-\textit{machine}. Wenn diese Maschine exploriert wird, werden die zusammenhängenden Zustandsübergänge der Exploration des Szenarios aufgesplittet, sodass konkrete Durchläufe des Szenarios mit speziellen Werten entstehen. Aus der Exploration werden also wieder getrennte Aufruf-Ketten von Aktionen bestimmt, aus denen anschließend kurze Testfälle erzeugt werden können. 
 
 \section{Exploration}
 
