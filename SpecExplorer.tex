@@ -205,6 +205,7 @@ Die erwähnte Projektstruktur ist typisch für ein Spec Explorer Projekt, auch wen
 Die in Abbildung \ref{fig:seimplementation1} dargestellte Klasse \emph{Accumulator} ist Teil Implementierung. Offensichtlich ist die dargestellte Implementierung fehlerhaft. Auch wenn dieses Beispiel sehr trivial erscheint, werden die Eigenschaften von Spec Explorer sowie der entsprechende Arbeitsablauf an diesem Beispiel sehr gut deutlich. Die Absicht der Implementierung in diesem Fall soll Ganzzahlen aufaddieren und zurückgeben können. Beim Zurückgeben sollen die aufsummierten Zahlen wieder auf 0 gesetzt werden. Dieses Verhalten soll durch ein Modell verifiziert werden können.
 
 \subsection{Modell}
+\label{subsec:umgebungmodell}
 Das zweite Projekt in der Spec Explorer Solution enthält das Modell. Spec Explorer unterstzt zwei Modell-Typen. Zum einen das statische Modell und zum anderen das nicht-statische Modell. Das statische Modell ist eine statische Klasse, dessen Aktionen ebenfalls nur statisch sind. Dadurch brauch sich Spec Explorer bei der Zustandsraum Exploration nicht um Instanzen kümmern. Das nicht-statische Modell verwendet Methoden von Objekten als Aktionen während der Exploration. Dadurch können unterschiedliche Zustände entstehen, je nachdem auf welchem Modell-Objekt eine Aktion ausgeführt wird. In dieser Seminararbeit wird ausschließlich der statische Ansatz behandelt. Das bedeutet nicht, dass das statische Modell keine Objekte verwenden kann, sondern lediglich die Aktionen müssen statisch bleiben. Dieser Ansatz hat also nur ein einziges Objekt-Kontext und das ist die Klasse selber.
 
 \begin{figure}[htbp]
@@ -219,6 +220,7 @@ In Abbildung \ref{fig:semodel} ist der Quellcode des Modells des Aufsummierers d
 Die Regeln des Modells entsprechen einer sehr einfachen Realisierung der Implementierung. Das Modell einer Datenbank könnte beispielsweise eine Hashtable als Datenstruktur verwenden. Das Modell in diesem Summen-Beispiel ist mit der Implementierung fast identisch, was an der Trivialität des Beispiels liegt. Weiterhin können \textit{Code Contracts}, die bereits aus Abschnitt \ref{sec:specsharp} über \textit{Spec$\#$} bekannt sind. Im Beispiel enthält jede Regel des Modells eine Pre-Condition und zwar wird dadurch sichergestellt, dass das Modell nur positive Zahlen, die größer als Null sind, aufaddiert. Dadurch wird die Zustandsraum-Exploration eingeschränkt um dem Problem der Zustandsraum-Explosion aus Unterabschnitt \ref{subsec:stateexplosion} entgegengewirkt, da nur Aufrufe dieser Aktion nur neue Zustände erzeugen, wenn die Vorbedingungen gelten.
 
 \subsection{Konfiguration}
+\label{subsec:umgebungkonfiguration}
 Das zweite Projekt einer Spec Explorer Solution enthält neben dem Modell auch eine Konfiguration. Diese Konfiguration besteht aus den in Unterabschnitt \ref{subsec:loesungstateexplosion} bereits vorgestellten \textit{configs} und \textit{machines}. Abbildung \ref{fig:seconfig1} zeigt die beiden \textit{configs} der Konfiguration des Summen-Beispiels. Die \emph{Main}-\textit{config} nimmt über \textit{switches} allgemeingültige Einstellungen der Explorationen der \textit{machines} vor. Unter anderem wird in dem Beispiel der Pfad zu dem Test-Projekt festgelegt, in dem die Testfälle erzeugt werden sollen. Eine maximale Aktions-Tiefe für Aufrufe der Modellregeln wird ebenfalls festgelegt. Die wichtigste Einstellung ist allerdings die Definition der Regeln der Modells als Aktionen (\textit{actions}).
 
 \begin{figure}[htbp]
@@ -244,31 +246,40 @@ Die \emph{SlicedAccumulatorModelProgram}-\textit{machine} lässt sich ebenfalls e
  -Operator lässt beide Maschinen parallel ausführen. Das Ergebnis ist also die Exploration des Zustandsraums des Szenarios, unter Berücksichtigung der Zustände des Modells. Es werden also alle möglichen Zustände gefunden, die das Modell haben kann, im Rahmen des Szenarios. Die \emph{AccumulatorTestSuite}-\textit{machine} ist ebenfalls explorierbar und kann Testfälle erzeugen. Dafür nutzt diese Maschine das Explorationsergebnis der \emph{SlicedAccumulatorModelProgram}-\textit{machine}. Wenn diese Maschine exploriert wird, werden die zusammenhängenden Zustandsübergänge der Exploration des Szenarios aufgesplittet, sodass konkrete Durchläufe des Szenarios mit speziellen Werten entstehen. Aus der Exploration werden also wieder getrennte Aufruf-Ketten von Aktionen bestimmt, aus denen anschließend kurze Testfälle erzeugt werden können. 
 
 \section{Exploration}
+Eine in der Konfiguration definierte \textit{machine} kann exploriert werden. Abbildung \ref{fig:seexploration} zeigt die Zustandsraum-Exploration des Modells. Der Zustandsautomat wird von Spec Explorer automatisch gezeichnet und erlaubt panning und zooming, sowie die Auswahl von Zuständen und Zustandsübergänge. Dabei werden für die von Spec Explorer automatisch nummerierten Zustände weitere Eigenschaften, wie beispielsweise der aktuelle Wert der Modell-Veränderlichen, angezeigt.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=400px]{seexploration.png}
+\includegraphics[width=380px]{seexploration.png}
 \caption{Darstellung der Exploration des Modells als Zustandsautomat}
 \label{fig:seexploration}
 \end{figure}
 
+Aus Abbildung \ref{fig:seexploration} geht ebenfalls hervor, dass die Exploration nicht unendlich ist. Die gelb eingefärbten Zustände markieren die Abbruchgrenze des Zustandsraums. Bei diesen gelben Zuständen ist die Grenze von 5 Bounds erreicht, sodass die Exploration abbricht. Bounds lassen sich über \textit{configs} in der Konfiguration einstellen.
+
 \section{Szenarien}
+Szenarien wurden bereits in Unterabschnitt \ref{subsec:loesungszenarien} behandelt. Dort wurde erklärt, wie Spec Explorer Szenarien als \textit{machines} definieren kann, die ebenfalls exploriert werden können. In Abbildung \ref{fig:sescenario} ist die Exploration des (\emph{Add}, \emph{Add}, \emph{ReadAndReset})-Szenarios dargestellt. Der Zustandsautomat des Ergebnisses ist sehr anschaulich und entspricht dem Verhalten, dass man auch von der Implementierung erwarten würde.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=300px]{sescenario.png}
+\includegraphics[width=250px]{sescenario.png}
 \caption{Darstellung eines Szenarios als Zustandsautomat}
 \label{fig:sescenario}
 \end{figure}
 
+In Abbildung \ref{fig:seslicedscenario1} ist die Exploration der \textit{machine} zu sehen, die die Zustände des Szenarios aus dem kompletten Zustandsraum des Modells herausschneidet.
+
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=300px]{seslicedscenario1.png}
+\includegraphics[width=260px]{seslicedscenario1.png}
 \caption{Darstellung eines Szenarios in Verbindung mit der Zustandsraum-Exploration}
 \label{fig:seslicedscenario1}
 \end{figure}
 
+Das Ergebnis entspricht einem Zustandsautomaten, der das Szenario komplett abbildet. Alle Zustände, die das Modell in Bezug auf das Szenario haben kann, werden erreicht. Um das Szenario an der Implementierung zu testen, müssen jetzt lediglich die Aufrufe, die für die Zustandsübergänge von dem Startzustand \emph{S0} über andere Zustände hinweg zurück zum Startzustand führen, als getrennte Aufruf-Ketten interpretiert werden.
+
 \section{Testfälle}
+Die getrennten Aufruf-Ketten, die für die Testfälle erforderlich sind, werden, wie in Unterabschnitt \ref{subsec:umgebungkonfiguration} beschrieben, über eine weitere \textit{machine} definiert. Abbildung \ref{fig:seslicedscenario2} zeigt die Exploration aller gültigen Pfade durch den Zustandsautomaten des Szenarios aus Abbildung \ref{fig:seslicedscenario1}. Die von der Maschine verwendete Strategie \emph{ShortTests} ist für die Auftrennung der Pfade verantwortlich. Auf weitere Strategien wird in dieser Seminararbeit nicht eingegangen.
 
 \begin{figure}[htbp]
 \centering
@@ -277,12 +288,18 @@ Die \emph{SlicedAccumulatorModelProgram}-\textit{machine} lässt sich ebenfalls e
 \label{fig:seslicedscenario2}
 \end{figure}
 
+Diese Aufruf-Ketten können jetzt von Spec Explorer eins zu eins in Testfälle übersetzt werden. Der Exploration Manager unterstützt die Testerzeugung einer Maschine, die mit \emph{TestEnabled = true} definiert ist. Auffällig ist hier die Syntax, die sich sehr an die menschliche Sprache anlehnt.
+\\
+Spec Explorer erzeugt für jede Ablauf-Kette einen Testfall (\emph{TestMethodAttribute}) in der Test-Klasse (\emph{TestClassAttribute}) des Szenarios. Die erzeugten Tests haben eine Abhängigkeit von der Spec Explorer Runtime Testumgebung. Theoretisch könnten die Tests auch ohne diese Abhängigkeit funktionieren. Durch diese Referenz haben die Tests die Möglichkeit Timeouts zu setzen, sowie die Ausführung detailliert zu protokollieren. Abbildung \ref{fig:setestcode1} zeigt die Test-Klasse, während die Testfälle für die vier Aufruf-Ketten zugeklappt sind.
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=300px]{setestcode1.png}
 \caption{Codeausschnitt eines erzeugten Testfalls}
 \label{fig:setestcode1}
 \end{figure}
+
+Abbildung \ref{fig:setestcode2} zeigt den erzeugten Testfall exemplarisch für die Aufruf-Kette (\emph{Add(2)}, \emph{Add(2)}, \emph{ReadAndReset()/4}). Der Test ruft die Methoden der Implementierung (!) auf, die mit den Regeln des Modells verknüpft wurden (wie Unterabschnitt \ref{subsec:umgebungmodell} beschrieben) und vergleicht abschließend ob der Rückgabewert der \emph{ReadAndReset}-Aktion dem erwarteten Wert \textit{4} entspricht.
 
 \begin{figure}[htbp]
 \centering
@@ -291,12 +308,20 @@ Die \emph{SlicedAccumulatorModelProgram}-\textit{machine} lässt sich ebenfalls e
 \label{fig:setestcode2}
 \end{figure}
 
+Die Tests sind sofort mit den Testwerkzeugen in Visual Studio 2010 ab Professional ausführbar. Erwartungsgemäß schlagen alle Tests fehl, dessen Erwartungswert ungleich \textit{4} ist.
+\newpage
+Dank der umfangreichen Protokollierung der Testfälle, ist die Beschreibung eines fehlgeschlagenen Tests sehr aussagekräftig und hilfreich. Der Entwickler sieht sofort, inwiefern sich der erwartete Zustand vom tatsächlichen unterscheidet, und zwar direkt auf die Variablen der Implementierung bezogen. Damit ist die Testerzeugung aus dem Modell komplett von Spec Explorer übernommen worden. Das Ergebnisse sind hilfreiche Testfälle, die noch nicht einmal programmiert werden mussten.
+\\
+Abbildung \ref{fig:seimplementation2} zeigt eine korrigierte Version der in Abbildung \ref{fig:seimplementation1} gezeigten fehlerhaften Implementierung. Diese Implementierung entspricht der einfachsten Version einer Summen-Funktion und funktioniert, was durch das erfolgreiche Durchlaufen aller vier Testfälle impliziert wird.
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=300px]{seimplementation2.png}
 \caption{Korrigierte Implementierung}
 \label{fig:seimplementation2}
 \end{figure}
+
+Damit endet die Evaluierung der Funktionsweise der Visual Stuido Erweiterung Spec Explorer 2010. Es wurde beschrieben, welche Projekt-Komponenten eine Spec Explorer Solution beinhaltet und wie diese zusammenhängen. Dabei wurde auf die Bedeutung der Konfiguration von Maschinen eingegangen und wie aus diesem Maschinen das Modell aus unterschiedlichsten Perspektiven im Rahmen von Szenarien exploriert werden kann. Weiterhin wurde gezeigt, wie Testfälle erzeugt werden können, die das zustandsorientierte Verhalten der Implementierung mit den Zuständen des Modells vergleichen. Von diesem Standpunkt aus, kann mit einer hohen Wahrscheinlichkeit von der Korrektheit der Implementierung ausgegangen werden. Im Gegensatz zu allen anderen Test-Methoden führt eine Veränderung der Spezifikation nur zu einer kleinen Änderung des Modells. Alle Testfälle können anschließend automatisch neu erzeugt werden.
 
 \chapter{Visual Studio Integration}
 \label{chap:vsintegration}
