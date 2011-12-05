@@ -327,23 +327,55 @@ Abbildung \ref{fig:seimplementation2} zeigt eine korrigierte Version der in Abbi
 
 Damit endet die Evaluierung der Funktionsweise der Visual Stuido Erweiterung Spec Explorer 2010. Es wurde beschrieben, welche Projekt-Komponenten eine Spec Explorer Solution beinhaltet und wie diese zusammenhängen. Dabei wurde auf die Bedeutung der Konfiguration von Maschinen eingegangen und wie aus diesem Maschinen das Modell aus unterschiedlichsten Perspektiven im Rahmen von Szenarien exploriert werden kann. Weiterhin wurde gezeigt, wie Testfälle erzeugt werden können, die das zustandsorientierte Verhalten der Implementierung mit den Zuständen des Modells vergleichen. Von diesem Standpunkt aus, kann mit einer hohen Wahrscheinlichkeit von der Korrektheit der Implementierung ausgegangen werden. Im Gegensatz zu allen anderen Test-Methoden führt eine Veränderung der Spezifikation nur zu einer kleinen Änderung des Modells. Alle Testfälle können anschließend automatisch neu erzeugt werden.
 
+
+
 \chapter{Visual Studio Integration}
 \label{chap:vsintegration}
+In diesem Kapitel wird auf die Integration der Spec Explorer Erweiterung mit Visual Studio eingegangen. Die Erweiterung installiert ein neues Projekt-Template unter \textit{File/New Project} und ein neues Fenster, den Exploration Explorer.
 
 \section{Exploration Manager}
+Der Exploration Manager ist ein Fenster, das sich in Visual Studio wie jedes andere Fenster wie eine Toolbox beliebig andocken lässt. Es enthält eine Auflistung aller in der Konfiguration beschriebenen \textit{machines}, die in Unterabschnitt \ref{subsec:umgebungkonfiguration} vorgestellt wurden. Jede dieser Maschinen kann über das Kontext-Menü exploriert werden, sofern die Maschine Exploration nicht unterdrückt. Aus einer \textit{machine}, die \emph{TestEnabled = true} definiert, können Testfälle erzeugt, die anschließend im Test-Projekt gespeichert oder einfach nur ausgeführt werden. Abbildung \ref{fig:seexplorationmanager} zeigt den Screenshot der Auflistung der Maschinen sowie das Kontext-Menü.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=300px]{seexplorationexplorer.png}
+\caption{Screenshot des Exploration Manager Fensters in Visual Studio 2010}
+\label{fig:seexplorationmanager}
+\end{figure}
+
 \label{sec:explorationmanager}
 
 \section{UML Extensions}
-
-\section{Testing Tools}
+Eine Erweiterung für Spec Explorer ist die Visual Studio Erweiterung \textit{UML Extensions} \cite{Microsoft2011}. Diese Extension erlaubt es aus einem explorierten Szenario ein UML-Sequenzdiagramm zu erzeugen. Aus diesem Sequenzdiagramm sind die konkreten Abläufe, die im Rahmen des Modells stattfinden, deutlich besser nachzuvollziehen und erlauben eine bessere Abbildung der Exploration auf den Quellcode des Modells. Leider kann im Rahmen dieser Seminararbeit nicht näher auf diese Erweiterung eingegangen werden.
 
 
 
 \chapter{Einsatz bei Microsoft}
+Team seit 2007 in der Windows Server Division\\
+Development und Testing Team in Beijing\\
+\\
+"`Microsoft Open Specifications"' Movement \cite{Microsoft2011a}\\
+Model-Based Quality Assurance of Windows Protocol Documentation \cite{WolfgangGrieskamp2008}\\
+\\
+Anwendung bei Großprojekt (250 Mannjahre Testing)\\
+Wahl des Werkzeugs für Test suites:
+\begin{description}
+	\item[50\%] Model-Based Testing-Tool
+	\item[50\%] Traditionelles Testing-Tool
+\end{description}
+Nach 2,5 Jahren, Effizienzsteigerung von Ø 42\%\\
+Anwendung durch testunerfahrenes Personal)
 
 
 
 \chapter{Fazit}
+Model repräsentiert Zustände der Implementierung\\
+State space exploration erreicht "`alle"' Zustände\\
+Szenarien definierbar\\
+Szenarien und Exploration "`verbinden"'\\
+Automatische Erzeugung von Testfällen für Szenarien\\
+State-based Testen der Implementierung\\
+"`Alles dreht sich um Zustände!"'
 
 
 
