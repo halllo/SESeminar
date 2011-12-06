@@ -21,6 +21,8 @@ normalheadings,				% Überschriften etwas kleiner (smallheadings)
 
 \begin{document}
 
+
+
 \thispagestyle{empty}
 \begin{titlepage}
 \begin{figure}[t]
@@ -190,7 +192,7 @@ Abbildung \ref{fig:seworkflow} illustriert den Ablauf des Testens mit Spec Explo
 \label{fig:seworkflow}
 \end{figure}
 
-In der semantischen Darstellung wird davon ausgegangen, dass bereits eine Implementierung besteht, die anhand eines ebenfalls bestehenden Modells verifiziert wird. Selbstverständlich könnte auch nur ein Modell existieren und die Implementierung würde erst nach der Testfallerzeugung im Rahmen eines \textit{Test Driven Development}-Ansatzes entstehen. Ebenfalls kann eine bestehende Implementierung auch nachträglich getestet werden, indem das Modell nachträglich entsteht. Eine gute Spezifikation entsteht jedenfalls dann, wenn Modell und Implementierung möglichst unabhängig voneinander entstehen.
+In der semantischen Darstellung wird davon ausgegangen, dass bereits eine Implementierung besteht, die anhand eines ebenfalls bestehenden Modells verifiziert wird. Selbstverständlich könnte auch nur ein Modell existieren und die Implementierung würde erst nach der Testfallerzeugung im Rahmen eines \textit{Test First}-Ansatzes entstehen. Ebenfalls kann eine bestehende Implementierung auch nachträglich getestet werden, indem das Modell nachträglich entsteht. Eine gute Spezifikation entsteht jedenfalls dann, wenn Modell und Implementierung möglichst unabhängig voneinander entstehen.
 \\
 In diesem Abschnitt werden die Zusammenhänge von Implementierung, Modell und Konfiguration des Modells beschrieben. 
 
@@ -351,31 +353,28 @@ Eine Erweiterung für Spec Explorer ist die Visual Studio Erweiterung \textit{UML
 
 
 \chapter{Einsatz bei Microsoft}
-Team seit 2007 in der Windows Server Division\\
-Development und Testing Team in Beijing\\
+In diesem Kapitel wird auf die Verwendung des Tools innerhalb Microsofts eingegangen. Leider konnten keine Information über die Verwendung durch andere Einrichtungen gefunden werden, sodass die Microsoft für diesen Akzeptanzbericht gewählt wurde.
 \\
-"`Microsoft Open Specifications"' Movement \cite{Microsoft2011a}\\
-Model-Based Quality Assurance of Windows Protocol Documentation \cite{WolfgangGrieskamp2008}\\
+Wolfgang Grieskamp beschreib in seinem Blogpost \cite{Grieskamp2009}, dass das Spec Explorer Team seit 2007 in der Windows Server Division angesiedelt ist. Das ist dadurch zu erklären, dass diese Abteilung viele eigene und standardisierte Protokolle einsetzt, die effektiv und effizient getestet werden müssen. Im Rahmen der "`Microsoft Open Specifications"' Bewegung \cite{Microsoft2011a} hat Microsoft begonnen sämtliche in Windows enthaltene Protokolle ausführlich schriftlich zu spezifizieren und zu testen. Dies hatte eine enge Zusammenarbeit mit dem Spec Explorer Team zur Folge, was zu dem Umzug des Team geführt hat. Mittlerweile gibt es neben dem Team in Redmond auch ein Spec Explorer Team in Peking, China, das sich mit der Entwicklung und dem Testen von Spec Explorer beschäftigt.
 \\
-Anwendung bei Großprojekt (250 Mannjahre Testing)\\
-Wahl des Werkzeugs für Test suites:
-\begin{description}
-	\item[50\%] Model-Based Testing-Tool
-	\item[50\%] Traditionelles Testing-Tool
-\end{description}
-Nach 2,5 Jahren, Effizienzsteigerung von Ø 42\%\\
-Anwendung durch testunerfahrenes Personal)
+Wolfgang Grieskamp hat zusammen mit Nico Kicillof und weiteren Spec Explorer Experten eine Ausarbeitung geschrieben, die sich mit dem modellbasierten Qualitätssicherung der \textit{Windows Protocol Documentation} auseinandersetzt \cite{WolfgangGrieskamp2008}.
+\\
+In seinem Blogpost \cite{Grieskamp2009} beschreibt Wolfgang Grieskamp die erfolgreiche Nutzung von Spex Explorer in einem Großprojekt mit einem Testaufwand von insgesamt 250 Mann-Jahren. Dabei geht nicht hervor, ob es sich bei diesem Projekt um die "`Microsoft Open Specifications"' Bewegung handelt. Jedenfalls wurden im Rahmen dieses Großprojekts die beteiligten Teams vor die Wahl gestellt ein modellbasiertes Test-Werkzeug, höchst wahrscheinlich Spec Explorer, oder einen traditionellen Test-Ansatz zu nutzen. Angeblich haben sich laut Grieskamp 50\% für das modellbasierte Tool und 50\% für traditionelles Unit-Testing entschieden. Zusammenfassend bescheinigt Grieskamp den Teams, die das modellbasierte Test-Tool eingesetzt haben, eine Effizientsteigierung von durchschnittlich 42\% nach einem Einsatz von 2,5 Jahren. Diese Steigerung wurde durch testunerfahrenes Personal erreicht und nicht, wie vielleicht vermutbar wäre, durch testerfahre Mitarbeiter. In welchem Zusammenhand diese Steigerung steht, erklärt Grieskamp leider nich. Es kann aber davon ausgegangen werden, dass die 42\% im Vergleich zu den anderen Team, die das modellbasierte Tool nicht eingesetzt haben, verstanden werden können.
 
 
 
 \chapter{Fazit}
-Model repräsentiert Zustände der Implementierung\\
-State space exploration erreicht "`alle"' Zustände\\
-Szenarien definierbar\\
-Szenarien und Exploration "`verbinden"'\\
-Automatische Erzeugung von Testfällen für Szenarien\\
-State-based Testen der Implementierung\\
-"`Alles dreht sich um Zustände!"'
+Nachdem in den vorigen Kapiteln die Visual Studio Erweiterung Spec Explorer, sowie Grundlagen und Entwicklung beschrieben wurden, fasst dieses Kapitel die wichtigsten Gegenstände, die Spec Explorer besonders auszeichnen, zusammen.
+\\\\
+Spec Explorer ist ein Test-Werkzeug, das es erlaubt Testfälle für eine Implementierung automatisch zu erzeugen. Diese Testfälle werden aus einem Modell, das die Implementierung repräsentiert, abgeleitet. In dem Modell werden die Anforderungen an die Software in C$\#$ spezifiziert. Dabei bleibt das Modell abstrakt und formal. Spec Explorer kann dieses Modell lesen und versucht alle Zustände, die das Modell haben kann, durch Ausführen von Regeln, die den Zustand des Modells verändern, zu erreichen. Es entsteht die sogenannte Zustandsraum-Exploration.
+\\
+Auf diesem Zustandsraum lassen sich Zustände als Szenarien, die durch Aufruf-Ketten von Regeln definiert werden, zusammenfassen. Durch die Verbindung von Zustandsraum und Szenario lassen sich alle Zustände des Modells finden, die durch das Szenario entstehen können. Aus diesen Zuständen können die als Szenario definierten Aufruf-Ketten als Pfade auftrennen. Ein Pfad entspricht also einer mit konkreten Werten verbunden Aufruf-Kette von Regeln und erreicht bestimmte Zustände.
+\\
+Aus einer solchen Ablauf-Kette kann ein Testfall erzeugt werden. Durch die Reihenfolge der Regel-Aufrufe können die entsprechenden Methoden des Modells aufgerufen werden. Der Zustand, den das Modell nach Ablauf der Aufruf-Kette hat, wird mit dem Zustand verglichen, den die Implementierung nach Aufruf der Methoden hat. Ein solcher Testfall wird von Spec Explorer für  \textit{MS Test} erzeugt und kann somit direkt durch Visual Studio ausgeführt werden.
+\\
+Spec Explorer testet also ob die Implementierung die gleichen Zustände erreicht wie das Modell, wenn die gleichen Regeln oder Methoden zur Veränderung der Veränderlichen des Systems, beziehungsweise des Modells, ausgeführt werden. Diese Art von Testfall kann auch als State-based Testen bezeichnet werden. Das bedeutet auch, das Spec Explorer nicht die Struktur oder die Interaktion des Systems testet.
+\\\\
+Abschließend kann Spec Explorer als modellbasiertes Test-Werkzeug zusammengefasst werden, das die Zustände einer Implementierung anhand der Zustände einer Spezifikation verifizieren kann.
 
 
 
