@@ -1,0 +1,92 @@
+﻿// This is a Spec Explorer coordination script (Cord version 1.0).
+// Here you define configurations and machines describing the
+// exploration task you want to perform.
+
+using TestAdapter;
+
+/// Contains actions of the model, bounds, and switches.
+config Main
+{
+    action abstract static void SystemUnderTest.Login(string user, string pass)
+    where   user in (. SpecExplorer1.ModelData.UserNames() .), 
+            pass in (. SpecExplorer1.ModelData.Passwords() .);
+
+    action abstract event static void SystemUnderTest.LoginSuccessful(string user)
+    where   user in (. SpecExplorer1.ModelData.UserNames() .);
+    
+    action abstract event static void SystemUnderTest.UnknownUser(string user)
+    where   user in (. SpecExplorer1.ModelData.UserNames() .);
+
+    action abstract static void SystemUnderTest.Purchase(string user, string item)
+    where   user in (. SpecExplorer1.ModelData.UserNames() .),
+            item in (. SpecExplorer1.ModelData.Items() .);
+
+    action abstract event static void SystemUnderTest.PurchaseSuccessful(string user, string item)
+    where   user in (. SpecExplorer1.ModelData.UserNames() .),
+            item in (. SpecExplorer1.ModelData.Items() .);
+    
+    action abstract event static void SystemUnderTest.PurchaseFailed(string user, string item, string message)
+    where   user in (. SpecExplorer1.ModelData.UserNames() .),
+            item in (. SpecExplorer1.ModelData.Items() .);
+    
+    action abstract static void SystemUnderTest.Logout(string user)
+    where   user in (. SpecExplorer1.ModelData.UserNames() .);
+    
+    switch GeneratedTestPath = "..\\SpecExplorer1.TestSuite";
+    switch StateBound = 256;
+    switch StepBound = 256;
+}
+
+machine Program() : Main
+{
+    construct model program from Main
+}
+
+machine LoginScenario() : Main
+{
+    (Login; 
+    (
+        (LoginSuccessful;
+            Logout) 
+        | 
+        (UnknownUser
+            )
+    )
+    )*
+}
+
+machine LoginScenarioStates() : Main
+{
+    LoginScenario || Program
+}
+
+machine LoginScenarioTests() : Main
+{
+    construct test cases where Strategy = "ShortTests" 
+    for LoginScenarioStates
+}
+
+machine PurchaseScenario() : Main
+{
+    (Login; 
+    (
+        (LoginSuccessful;
+            (Purchase; (PurchaseSuccessful | PurchaseFailed))*;
+            Logout)
+        | 
+        (UnknownUser;
+            (Purchase; (PurchaseSuccessful | PurchaseFailed))*
+            )
+    ))
+}
+
+machine PurchaseScenarioStates() : Main
+{
+    PurchaseScenario || Program
+}
+
+machine PurchaseScenarioTests() : Main
+{
+    construct test cases where Strategy = "ShortTests" 
+    for PurchaseScenarioStates
+}
